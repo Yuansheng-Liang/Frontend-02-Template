@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tutorial Demo</title>
+  </head>
+  <body>
+    
+    <div id="mountNode"></div>
+    
+    <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-3.1.0/build/g6.js"></script>
+
+    <script>
+      // 定义数据源
+      const data = {
+        // 点集
+        nodes: [
+          
+          {
+            id: 'Infinity',
+            label:'Infinity',
+            comboId: 'realm',
+          },
+          {
+            id: 'NaN',
+            label:'NaN',
+            comboId: 'realm',
+          },{
+            id: 'undefined',
+            label:'undefined',
+            comboId: 'realm',
+          },{
+            id: 'eval',
+            label:'eval',
+            comboId: 'realm',
+          },{
+            id: 'isFinite',
+            label:'isFinite',
+            comboId: 'realm',
+          },{
+            id: 'isNaN',
+            label:'isNaN',
+            comboId: 'realm',
+          },{
+            id: 'parseFloat',
+            label:'parseFloat',
+            comboId: 'realm',
+          },{
+            id: 'parseInt',
+            label:'parseInt',
+            comboId: 'realm',
+          },{
+            id: 'decodeURI',
+            label:'decodeURI',
+            comboId: 'realm',
+          },{
+            id: 'decodeURIComponent',
+            label:'decodeURIComponent',
+            comboId: 'realm',
+          },{
+            id: 'encodeURI',
+            label:'encodeURI',
+            comboId: 'realm',
+          },{
+            id: 'encodeURIComponent',
+            label:'encodeURIComponent',
+            comboId: 'realm',
+          },{
+            id: 'Array',
+            label:'Array',
+            comboId: 'realm',
+          },{
+            id: 'Date',
+            label:'Date',
+            comboId: 'realm',
+          },{
+            id: 'RegExp',
+            label:'RegExp',
+            comboId: 'realm',
+          },{
+            id: 'Promise',
+            label:'Promise',
+            comboId: 'realm',
+          },{
+            id: 'Proxy',
+            label:'Proxy',
+            comboId: 'realm',
+          },{
+            id: 'Map',
+            label:'Map',
+            comboId: 'realm',
+          },{
+            id: 'WeakMap',
+            label:'WeakMap',
+            comboId: 'realm',
+          },{
+            id: 'Set',
+            label:'Set',
+            comboId: 'realm',
+          },{
+            id: 'WeakSet',
+            label:'WeakSet',
+            comboId: 'realm',
+          },{
+            id: 'Function',
+            label:'Function',
+            comboId: 'realm',
+          },{
+            id: 'Boolean',
+            label:'Boolean',
+            comboId: 'realm',
+          },{
+            id: 'String',
+            label:'String',
+            comboId: 'realm',
+          },{
+            id: 'Number',
+            label:'Number',
+            comboId: 'realm',
+          },{
+            id: 'Symbol',
+            label:'Symbol',
+            comboId: 'realm',
+          },{
+            id: 'Object',
+            label:'Object',
+            comboId: 'realm',
+          },{
+            id: 'Error',
+            label:'Error',
+            comboId: 'realm',
+          },{
+            id: 'EvalError',
+            label:'EvalError',
+            comboId: 'realm',
+          },{
+            id: 'RangeError',
+            label:'RangeError',
+            comboId: 'realm',
+          },{
+            id: 'ReferenceError',
+            label:'ReferenceError',
+            comboId: 'realm',
+          },{
+            id: 'TypeError',
+            label:'TypeError',
+            comboId: 'realm',
+          },{
+            id: 'URIError',
+            label:'URIError',
+            comboId: 'realm',
+          },{
+            id: 'ArrayBuffer',
+            label:'ArrayBuffer',
+            comboId: 'realm',
+          },{
+            id: 'SharedArrayBuffer',
+            label:'SharedArrayBuffer',
+            comboId: 'realm',
+          },{
+            id: 'DataView',
+            label:'DataView',
+            comboId: 'realm',
+          },{
+            id: 'Typed Array',
+            label:'Typed Array',
+            comboId: 'realm',
+          },{
+            id: 'Float32Array',
+            label:'Float32Array',
+            comboId: 'realm',
+          },{
+            id: 'Float64Array',
+            label:'Float64Array',
+            comboId: 'realm',
+          },{
+            id: 'Int8Array',
+            label:'Int8Array',
+            comboId: 'realm',
+          },{
+            id: 'Int16Array',
+            label:'Int16Array',
+            comboId: 'realm',
+          },{
+            id: 'Int32Array',
+            label:'Int32Array',
+            comboId: 'realm',
+          },{
+            id: 'UInt8Array',
+            label:'UInt8Array',
+            comboId: 'realm',
+          },{
+            id: 'UInt16Array',
+            label:'UInt16Array',
+            comboId: 'realm',
+          },{
+            id: 'UInt32Array',
+            label:'UInt32Array',
+            comboId: 'realm',
+          },{
+            id: 'UInt8ClampedArray',
+            label:'UInt8ClampedArray',
+            comboId: 'realm',
+          },{
+            id: 'Atomics',
+            label:'Atomics',
+            comboId: 'realm',
+          },{
+            id: 'JSON',
+            label:'JSON',
+            comboId: 'realm',
+          },{
+            id: 'Math',
+            label:'Math',
+            comboId: 'realm',
+          },{
+            id: 'Reflect',
+            label:'Reflect',
+            comboId: 'realm',
+          },
+        ],
+        // 边集
+        edges: [
+          // 表示一条从 node1 节点连接到 node2 节点的边
+          {
+            source: 'realm',
+            target: 'node2',
+          },
+        ],
+        combos:[
+          {
+          id:'realm',
+          label:'realm',
+          type:'rect',
+          size:[1300,1100],
+        },
+        ],
+
+        
+      };
+
+      // 创建 G6 图实例
+      const graph = new G6.Graph({
+        container: 'mountNode', // 指定图画布的容器 id，与第 9 行的容器对应
+        // 画布宽高
+        width: 1600,
+        height: 1300,
+        layout: {                // Object，可选，布局的方法及其配置项，默认为 random 布局。
+  	    type: 'force',
+        preventOverlap: true,
+        nodeSize: 30,        
+        },
+        groupByTypes: false,
+       /* defaultCombo:{
+
+        }*/
+      });
+      // 读取数据
+      graph.data(data);
+      // 渲染图
+      graph.render();
+    </script>
+  </body>
+</html>
