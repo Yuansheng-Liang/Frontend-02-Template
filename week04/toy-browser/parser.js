@@ -1,7 +1,56 @@
 let currentToken = null;
+let currentAttribute = null;
+
+let stack = [{type: "document",children:[]}];
 
 function emit(token) {
-	console.log(token);
+	if(token.type === "text") 
+		return;
+	let top = stack[stack.length - 1];
+
+	if(token === "startTag") {
+		let element = {
+			type:"element",
+			children:[],
+			attributes:[]
+		};
+
+		element.tagName = token.tagName;
+
+		for(let p in token) {
+			if(p != "type" || p != "tagName") {
+				element.attributes.push({
+					name: p,
+					value: token[p]
+				});
+			}
+		}
+
+		top.children.push(element);
+		element.parent = top;
+
+		if(!isSelfClosing)
+			stack.push(element);
+		
+		currentTextNode = null;
+
+	} else if(token.type === "endTag") {
+		if(top.tagName != token.tagName) {
+			throw new Error("Tag start name doesn't match ! ");
+		} else {
+			stack.pop();
+		}
+		currentTextNode = null;
+	} else if(token.type === "text") {
+		if(currentTextNode === null) {
+			currentTextNode = {
+				type: "text",
+				content:""
+			}
+			top.children.push(currentTextNode);
+		}
+		currentTextNode.content += token.content;
+	}
 }
 
 
