@@ -71,7 +71,8 @@ function computeCSS(element){
 		element.computedStyle = {};
 	
 	for(let rule of rules) {
-		var selectorParts = rules.selector[0].split(' ').reverse();
+		////  var selectorParts = rules.selector[0].split(' ').reverse();
+		var selectorParts = rule.selectors[0].split(' ').reverse(); //rules.selector[0] -> rule.selectors[0]
 
 		if(!matchCSS(element,selectorParts[0])) {
 			continue;
@@ -110,11 +111,11 @@ function computeCSS(element){
 }
 
 function emit(token) {
-	if(token.type === "text") 
-		return;
+	/*if(token.type === "text") 
+		return;*/
 	let top = stack[stack.length - 1];
 
-	if(token === "startTag") {
+	if(token.type === "startTag") {
 		let element = {
 			type:"element",
 			children:[],
@@ -136,9 +137,9 @@ function emit(token) {
 		top.children.push(element);
 		element.parent = top;
 
-		if(!isSelfClosing)
+		if(!token.isSelfClosing){
 			stack.push(element);
-		
+		}
 		currentTextNode = null;
 
 	} else if(token.type === "endTag") {
@@ -187,7 +188,7 @@ function data(c){
 function tagOpen(c){
   if(c == '/') {
     	return endTagOpen;
-  } else if(c.matchCSS(/^[a-zA-Z]$/)) {
+  } else if(c.match(/^[a-zA-Z]$/)) {
 	  	currentToken = {
 			  type:"startTag",
 			  tagName : ""
@@ -199,7 +200,7 @@ function tagOpen(c){
 }
 
 function endTagOpen(c){
-  if(c.matchCSS(/^[a-zA-Z]$/)) {
+  if(c.match(/^[a-zA-Z]$/)) {
 	  	currentToken = {
 			  type: "endTag",
 			  tagName: ""
@@ -215,11 +216,11 @@ function endTagOpen(c){
 }
 
 function tagName(c){
-	if(c.matchCSS(/^[\t\n\f ]$/)) {
+	if(c.match(/^[\t\n\f ]$/)) {
 		return beforeAttributeName;
 	} else if(c == '/') {
 		  return selfClosingStartTag;
-	  } else if(c.matchCSS(/^[a-zA-Z]$/)) {
+	  } else if(c.match(/^[a-zA-Z]$/)) {
 		  	currentToken.tagName += c;
 			return tagName;
 	  } else if(c == '>') {
@@ -231,7 +232,7 @@ function tagName(c){
 }
 
 function beforeAttributeName(c){
-	if(c.matchCSS(/^[\t\n\f ]$/)) {
+	if(c.match(/^[\t\n\f ]$/)) {
 		return beforeAttributeName;
 	} else if(c == '/' || c == '>' || c == 'EOF') {
 		return afterAttributeName(c);
@@ -247,7 +248,7 @@ function beforeAttributeName(c){
 }
 
 function attributeName(c){
-	if(c.matchCSS(/^[\t\n\f ]$/) || c == '/' || c == "v" || c == EOF) {
+	if(c.match(/^[\t\n\f ]$/) || c == '/' || c == ">" || c == EOF) {
 		return afterAttributeName(c);
 	} else if(c == '=') {
 		return beforeAttributeValue;
@@ -262,7 +263,7 @@ function attributeName(c){
 }
 
 function beforeAttributeValue(c) {
-	if(c.matchCSS(/^[\t\n\f ]$/) || c =='/' || c == '>' || c == EOF) {
+	if(c.match(/^[\t\n\f ]$/) || c =='/' || c == '>' || c == EOF) {
 		return beforeAttributeValue;
 	} else if(c == '\"') {
 		return doubuleQuotedAttributeValue;
@@ -304,7 +305,7 @@ function singleQuotedAttributeValue(c){
 }
 
 function afterQuotedAttributeValue(c){
-	if(c.matchCSS(/^[\t\n\f ]$/)) {
+	if(c.match(/^[\t\n\f ]$/)) {
 		return beforeAttributeName;
 	} else if(c == '/') {
 		return selfClosingStartTag;
@@ -316,12 +317,12 @@ function afterQuotedAttributeValue(c){
 
 	} else {
 		currentAttribute.value += c;
-		return afterQuotedAttributeValue;
+		return afterQuotedAttributeValue; //return doubuleQuotedAttributeValue;
 	}
 }
 
 function UnquotedAttributeValue(c){
-	if(c.matchCSS(/^[\t\n\f ]$/)) {
+	if(c.match(/^[\t\n\f ]$/)) {
 		currentToken[currentAttribute.name] = currentAttribute.value;
 		return beforeAttributeName;
 	} else if(c == '/') {
@@ -346,12 +347,35 @@ function UnquotedAttributeValue(c){
 
 function selfClosingStartTag(c){
 	if(c == ">") {
-		currentToken.isSelfClosing = ture;
+		currentToken.isSelfClosing = true;
 		return data;
 	} else if(c == "EOF") {
 
 	} else {
 
+	}
+}
+
+function afterAttributeName(c){
+	if(c.match(/^[\t\n\f ]$/)) {
+		return afterAttributeName;
+	} else if(c == '/') {
+		return selfClosingStartTag;
+	} else if(c == '=') {
+		return beforeAttributeValue;
+	} else if(c == '>') {
+		currentToken[currentAttribute.name] = currentAttribute.value;
+		emit(currentToken);
+		return data;
+	} else if(c == EOF) {	
+
+	} else {
+		currentToken[currentAttribute.name] = currentAttribute.value;
+		currentAttribute = {
+			name: "",
+			value: ""
+		};
+		return attributeName(c);
 	}
 }
 

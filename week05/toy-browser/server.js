@@ -5,7 +5,8 @@ http.createServer((request,response) =>{
     request.on('error',(err) => {
         console.log(err);
     }).on('data',(chunk) => {
-        body.push(chunk.toString());
+         ////body.push(chunk.toString()); 
+         body.push(chunk); 
     }).on('end',() => {
         body = Buffer.concat(body).toString();
         console.log('body:',body);
@@ -40,6 +41,6 @@ http.createServer((request,response) =>{
 </html>`
         );
     })
-}).listen(8080);
+}).listen(8088);
 
 console.log('server started');

@@ -2,14 +2,14 @@ const net = require('net');
 const parser = require('./parser.js');
 const render = require('./render');
 
-var images = require('images');
+const images = require('images');
 
 
 class Request{
     constructor(options){
         this.method = options.method || 'GET';
         this.host = options.host;
-        this.pot = options.pot || 80;
+        this.port = options.port || 80;
         this.path = options.path || '/';
         this.body = options.body || {};
         this.headers = options.headers || {};
@@ -49,6 +49,7 @@ class Request{
             });
 
             connection.on('error',(err) => {
+                console.log("errorrrrrrrrrrrrrrrrrrrrrrr!!!!!!!!!!!");
                 reject(err);
                 connection.end();
             });
@@ -95,6 +96,7 @@ class RsponseParser{
         }
     }
     receive(string){
+        console.log(string);
         for(let i = 0; i < string.length; i++){
             this.receiveChar(string.charAt(i));
         }
@@ -102,7 +104,7 @@ class RsponseParser{
     receiveChar(char){
         if(this.current === this.WAITING_STATUS_LINE){
             if(char === '\r'){
-                this.current = this.WAITING_HEADER_LINE_END
+                this.current = this.WAITING_STATUS_LINE_END
             } else {
                 this.statusLine += char;
             }
@@ -156,7 +158,7 @@ class TrunkedBodyParser {
         this.WAITING_NEW_LINE_END = 4;
         this.length = 0;
         this.content = [];
-        this.isFinished = falsed;
+        this.isFinished = false;
         this.current = this.WAITING_LENGTH;
     }
     receiveChar(char){
@@ -176,7 +178,7 @@ class TrunkedBodyParser {
             }
         } else if(this.current === this.READING_TUNK) {
             this.content.push(char);
-            this.length--;
+            this.length --;
             if(this.length === 0) {
                 this.current = this.WAITING_NEW_LINE;
             }
@@ -208,7 +210,7 @@ void async function(){
     });
 
     let response = await request.send();
-
+    
     let dom = parser.parseHTML(response.body); 
     let viewport = images('800,600');
     render(viewport,dom.children[0].children[3].children[1].children[3]);
