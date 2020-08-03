@@ -21,7 +21,7 @@ http.createServer((request,response) =>{
     display:flex;
     background-color:rgb(255,255,255);
 }
-#container #mayid {
+#container #myid {
     width:200px;
     height:200px;
     background-color:rgb(255,0,0);
@@ -34,8 +34,8 @@ http.createServer((request,response) =>{
 </head>
 <body>
     <div id="container">
-        <div id="myid"/>
-        <div class="c1" />
+        <div id="myid"></div>
+        <div class="c1"></div>
     </div>
 </body>
 </html>`
