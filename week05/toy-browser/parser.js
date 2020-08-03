@@ -1,12 +1,12 @@
-const { request } = require("http");
-
+//const { request } = require("http");
+const EOF = Symbol("EOF");
 const css = require("css");
-//const { matchCSS } = require("assert");
-const { unwatchFile } = require("fs");
+//const { unwatchFile } = require("fs");
 const layout = require('./layout.js');
 
 let currentToken = null;
 let currentAttribute = null;
+let currentTextNode;
 
 let stack = [{type: "document",children:[]}];
 
@@ -125,7 +125,7 @@ function emit(token) {
 		element.tagName = token.tagName;
 
 		for(let p in token) {
-			if(p != "type" || p != "tagName") {
+			if(p != "type" && p != "tagName") { ////	 if(p != "type" || p != "tagName") {
 				element.attributes.push({
 					name: p,
 					value: token[p]
@@ -166,12 +166,12 @@ function emit(token) {
 }
 
 
-const EOF = Symbol("EOF");
+
 
 function data(c){
-  if(c == '<') {
+  if(c === '<') {
    	 	return tagOpen;
-  } else if(c == EOF) {
+  } else if(c === EOF) {
 		emit({
 			type:"EOF"
 		});
@@ -186,7 +186,7 @@ function data(c){
 } 
 
 function tagOpen(c){
-  if(c == '/') {
+  if(c === '/') {
     	return endTagOpen;
   } else if(c.match(/^[a-zA-Z]$/)) {
 	  	currentToken = {
@@ -241,7 +241,7 @@ function beforeAttributeName(c){
 	} else {
 		currentAttribute = {
 			name:"",
-			value:""
+			value:"",
 		}
 		return attributeName(c);
 	}
@@ -254,7 +254,7 @@ function attributeName(c){
 		return beforeAttributeValue;
 	} else if(c == '\u0000') {
 
-	} else if(c == '\"' || c == '\'' || c == '<') {
+	} else if(c == '"' || c == '\'' || c == '<') {
 
 	} else {
 		currentAttribute.name += c;
@@ -348,6 +348,7 @@ function UnquotedAttributeValue(c){
 function selfClosingStartTag(c){
 	if(c == ">") {
 		currentToken.isSelfClosing = true;
+		emit(currentToken);
 		return data;
 	} else if(c == "EOF") {
 
@@ -373,7 +374,7 @@ function afterAttributeName(c){
 		currentToken[currentAttribute.name] = currentAttribute.value;
 		currentAttribute = {
 			name: "",
-			value: ""
+			value: "",
 		};
 		return attributeName(c);
 	}
@@ -387,4 +388,5 @@ module.exports.parseHTML = function parseHTML(html) {
     state = state(EOF); 
 /*  console.log(html);
 	console.log(html)*/
+	return stack[0];
 }

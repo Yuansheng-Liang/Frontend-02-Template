@@ -212,7 +212,7 @@ void async function(){
     let response = await request.send();
     
     let dom = parser.parseHTML(response.body); 
-    let viewport = images('800,600');
+    let viewport = images(800,600);
     render(viewport,dom.children[0].children[3].children[1].children[3]);
 
     viewport.save('viewport.jpg');

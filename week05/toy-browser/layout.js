@@ -3,17 +3,19 @@ function getStyle(element){
         element.style = {};
     
     for(let prop in element.computedStyle) {
-////        var p = element.computedStyle.value;
+        var p = element.computedStyle.value;        
 ////        element.style[prop] = element.computedstyle[prop].value;
-        var p = element.computedStyle[prop].value;
-        element.style[prop] = p;
+        var q = element.computedStyle[prop].value;
+        element.style[prop] = q
+////        var p = element.computedStyle[prop].value;
+////        element.style[prop] = p;
 
 
         if(element.style[prop].toString().match(/px$/)) {
             element.style[prop] = parseInt(element.style[prop]);
         }
 
-        if(element.style[prop].toString().match(/^[0-9\.]$/)) {
+        if(element.style[prop].toString().match(/^[0-9\.]+$/)) {
             element.style[prop] = parseInt(element.style[prop]);
         }
     }
@@ -125,6 +127,7 @@ function layout(element){
         elementStyle[mainSize] = 0;
         for(var i = 0; i < items.length; i++) {
             var item = items[i];
+            var itemStyle = getStyle(item); // plus
             if(itemStyle[mainSize] !== null ||itemStyle[mainSize] !== void 0)
                 elementStyle[mainSize] = elementStyle[mainSize] + item[mainSize];
         }
@@ -199,14 +202,17 @@ function layout(element){
         }
     } else {
         flexLines.forEach(function (items){
-            var mainSpace = item.mainSpace;
+////            var mainSpace = item.mainSpace;
+            var mainSpace = items.mainSpace;
             var flexTotal = 0;
 
             for(var i = 0; i < items.length; i++) {
                 var item = items[i];
                 var itemStyle = getStyle(item);
 
-                if((itemStyle.flex !== null) && (itemStyle.flex !== (void 0))) {
+////                if((itemStyle.flex !== null) && (itemStyle.flex !== (void 0))) {
+                    
+                if((itemStyle.flex !== null) && (itemStyle !== (void 0))) {    
                     flexTotal += itemStyle.flex;
                     continue;
                 }
@@ -251,7 +257,7 @@ function layout(element){
                     var item = items[i];
                     itemStyle[mainStart,currentMain]
                     itemStyle[mainStart] = currentMain;
-                    itemStyle[mainEnd] = itemStyle[mainStart] + mainSign * itemStyle[mainsize];
+                    itemStyle[mainEnd] = itemStyle[mainStart] + mainSign * itemStyle[mainSize];
                     currentMain = itemStyle[mainEnd] + step;
                 }
             }
@@ -307,7 +313,7 @@ function layout(element){
     }
 
      flexLines.forEach(function(items){
-        var crossSize = style.alignContent === 'stretch' ?
+        var lineCrossSize = style.alignContent === 'stretch' ?
             items.crossSpace + crossSpace / flexLines.length :
             items.crossSpace;
         for(var i = 0; i < items.length; i++){
