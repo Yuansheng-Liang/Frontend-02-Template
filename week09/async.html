@@ -1,0 +1,85 @@
+<html>
+    <style>
+        div {
+            background-color: grey;
+            display: inline-block;
+            margin: 30px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+        }
+
+        .green.light {
+            background-color: green;
+        }
+        .yellow.light {
+            background-color: yellow;
+        }
+        .red.light {
+            background-color: red;
+        }
+    </style>
+
+    <div class="green"></div>
+    <div class="yellow"></div>
+    <div class="red"></div>
+
+    <script>
+        function green(){
+            let div = document.getElementsByTagName("div");
+            for(let i = 0; i < 3; i++) {
+                div[i].classList.remove("light");
+            }
+            let green = document.getElementsByClassName("green")[0];
+            green.classList.add("light");
+        }
+        function yellow(){
+            let div = document.getElementsByTagName("div");
+            for(let i = 0; i < 3; i++) {
+                div[i].classList.remove("light");
+            }
+            let yellow = document.getElementsByClassName("yellow")[0];
+            yellow.classList.add("light");
+        }
+        function red(){
+            let div = document.getElementsByTagName("div");
+            for(let i = 0; i < 3; i++) {
+                div[i].classList.remove('light');
+            }
+            let red = document.getElementsByClassName("red")[0];
+            red.classList.add("light");
+        }
+
+        function sleep(t){
+            return new Promise((resort,reject) => {
+                setTimeout(resort,t);
+            })           
+        }
+
+        async function go(){
+        /*    green();
+            sleep(1000).then(() => {
+                yellow();
+                return sleep(200);
+            }).then(() => {
+                red();
+                return sleep(100);
+            }).then(() => {
+                go();
+            })*/
+            while(1){
+                green();
+                await sleep(1000);
+
+                yellow();
+                await sleep(200);
+
+                red();
+                await sleep(100);
+            }
+        }
+
+
+
+    </script>
+</html>
