@@ -1,0 +1,19 @@
+
+<html>
+    <body oncontextmenu="event.preventDefault()">
+        <!-- <script src="./gusture.js"></script> -->
+        <script type="module">
+            import {enableGesture} from "./gesture.js";
+            document.documentElement.addEventListener("tap" , () => {
+                console.log("tap event trriger!");
+            })
+            document.documentElement.addEventListener("pan" , () => {
+                console.log("pan event trriger!");
+            })
+            document.documentElement.addEventListener("press" , () => {
+                console.log("press event trriger!");
+            })
+
+        </script>
+    </body>
+</html>
