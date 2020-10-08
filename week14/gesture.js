@@ -238,7 +238,7 @@ export class Listener {
             let context = Object.create(null);
 
             contexts.set("mouse" + (1 << event.button), context);
-            start(event, context);
+            recognizer.start(event, context);
 
             let mousemove = (event, context) => {
                 let button = 1;
@@ -256,7 +256,7 @@ export class Listener {
 
                     if(button & event.buttons) {
                         context = contexts.get("mouse" + key);
-                        move(event, context);
+                        recognizer.move(event, context);
                     }
                     button = button << 1;
                 }
@@ -264,7 +264,7 @@ export class Listener {
             let mouseup = event => {
                 //console.log("mouseup");
                 let context = contexts.get("mouse" + (1 << event.button));
-                end(event, context);
+                recognizer.end(event, context);
                 contexts.delete("mouse" + (1 << event.button));
 
                 if(isMouseListening) {
@@ -286,21 +286,21 @@ export class Listener {
             for(let touch of point.changedTouches) {
                 let context  = Object.create(null);
                 contexts.set(touch.identifier, context);
-                start(touch, context);
+                recognizer.start(touch, context);
             }
         });
 
         element.addEventListener("touchmove", point => {
             for(let touch of point.changedTouches) {
                 let context = contexts.get(touch.identifier);
-                move(touch, context);
+                recognizer.move(touch, context);
             }
         });
 
         element.addEventListener("touchend", point => {
             for(let touch of point.changedTouches) {
                 let context = contexts.get(touch.identifier);
-                end(touch, context);
+                recognizer.end(touch, context);
                 contexts.delete(touch.identifier);
             }
         });
@@ -308,7 +308,7 @@ export class Listener {
         element.addEventListener("touchcancel", point => {
             for(let touch of point.changedTouches) {
                 let context = contexts.get(touch.identifier);
-                cancel(touch, context);
+                recognizer.cancel(touch, context);
                 contexts.delete(touch.identifier);
             }
         });
@@ -339,7 +339,8 @@ export class Recognizer {
             context.isPress = true;
     
             context.handler = null;
-            console.log("pressStart");
+            // console.log("pressStart");
+            this.dispatcher.dispatch("pressstart", {});
         }, 500);
     }
     move(point, context) {
@@ -354,7 +355,7 @@ export class Recognizer {
             context.isPress = false;
             context.isVertical = Math.abs(dx) < Math.abs(dy);
     
-            console.log("panStart", point.clientX, point.clientY);
+            //console.log("panStart", point.clientX, point.clientY);
             this.dispatcher.dispatch("panstart", {
                 startX: context.startX,
                 startY: context.startY,
@@ -365,7 +366,8 @@ export class Recognizer {
         }
     
         if(context.isPan) {         //状态为pan时执行以下代码
-            console.log("Pan", dx, dy);
+            //console.log("Pan", dx, dy);
+            this.dispatcher.dispatch("Panning", {});
         }
     
         context.points = context.points.filter((point) => Date.now() - point.t <= 500);
@@ -384,8 +386,8 @@ export class Recognizer {
             context.isPan = false,
             context.isPress = false;
     
-            console.log("Tap", point.clientX, point.clientY);
-            dispatch("tap", {});
+            //console.log("Tap", point.clientX, point.clientY);
+            this.dispatcher.dispatch("tap", {});
         }
         
         if(context.isPress) {
@@ -394,8 +396,11 @@ export class Recognizer {
             context.isPan = false,
             context.isPress = true;
     
-            console.log("pressEnd", point.clientX, point.clientY);
-            dispatch("press", {});
+            //console.log("pressEnd", point.clientX, point.clientY);
+            this.dispatcher.dispatch("press", {
+                clientX: point.clientX,
+                clientY: point.clientY
+            });
         }
     
         context.points = context.points.filter((point) => Date.now() - point.t <= 500);
@@ -412,7 +417,7 @@ export class Recognizer {
     
         //console.log(v);
         if(v > 1.5) {
-            console.log("flick");
+            //console.log("flick");
             this.dispatcher.dispatch("flick", {
                 startX: context.startX,
                 startY: context.startY,
@@ -431,10 +436,10 @@ export class Recognizer {
             context.isTap = false,
             context.isPan = true,
             context.isPress = false;
-            context.isVertical = Math.abs(dx)
+
     
-            console.log("panEnd", point.clientX, point.clientY);
-            dispatch("pan", {
+            //console.log("panEnd", point.clientX, point.clientY);
+            this.dispatcher.dispatch("pan", {
                 startX: context.startX,
                 startY: context.startY,
                 clientX: point.clientX,
@@ -448,7 +453,8 @@ export class Recognizer {
     }
     cancel(point, context) {
         clearTimeout(context.handler);
-        console.log("cancel", point.clientX, point.clientY);
+        //console.log("cancel", point.clientX, point.clientY);
+        this.dispatcher.dispatch("cancel", {});
     }
 
 }

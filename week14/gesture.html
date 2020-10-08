@@ -4,15 +4,26 @@
         <!-- <script src="./gusture.js"></script> -->
         <script type="module">
             import {enableGesture} from "./gesture.js";
+            enableGesture(document.documentElement);
             document.documentElement.addEventListener("tap" , () => {
                 console.log("tap event trriger!");
             })
             document.documentElement.addEventListener("pan" , () => {
                 console.log("pan event trriger!");
             })
+            document.documentElement.addEventListener("pressstart" , () => {
+                console.log("pressstart event trriger!");
+            })
             document.documentElement.addEventListener("press" , () => {
                 console.log("press event trriger!");
             })
+            document.documentElement.addEventListener("Panning" , () => {
+                console.log("Panning event trriger!");
+            })
+            document.documentElement.addEventListener("cancel" , () => {
+                console.log("cancel event trriger!");
+            })
+
 
         </script>
     </body>
