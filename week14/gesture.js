@@ -387,22 +387,7 @@ export class Recognizer {
             console.log("Tap", point.clientX, point.clientY);
             dispatch("tap", {});
         }
-        if(context.isPan) {
-    
-            context.isTap = false,
-            context.isPan = true,
-            context.isPress = false;
-            context.isVertical = Math.abs(dx)
-    
-            console.log("panEnd", point.clientX, point.clientY);
-            dispatch("pan", {
-                startX: context.startX,
-                startY: context.startY,
-                clientX: point.clientX,
-                clientY: point.clientY,
-                isVertical: context.isVertical
-            });
-        }
+        
         if(context.isPress) {
     
             context.isTap = false,
@@ -435,7 +420,28 @@ export class Recognizer {
                 clientY: point.clientY,
                 isVertical: context.isVertical,
                 velocity: v
-            })
+            });
+            context.isFlick = true;
+        } else {
+            context.isFlick = false;
+        }
+
+        if(context.isPan) {
+    
+            context.isTap = false,
+            context.isPan = true,
+            context.isPress = false;
+            context.isVertical = Math.abs(dx)
+    
+            console.log("panEnd", point.clientX, point.clientY);
+            dispatch("pan", {
+                startX: context.startX,
+                startY: context.startY,
+                clientX: point.clientX,
+                clientY: point.clientY,
+                isVertical: context.isVertical,
+                isFlick: context.isFlick
+            });
         }
     
         //console.log("end", point.clientX, point.clientY);
