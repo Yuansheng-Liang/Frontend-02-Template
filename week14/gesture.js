@@ -283,6 +283,8 @@ export class Listener {
 
         /***************************** 启用touch事件 **********************************************************************************/
         element.addEventListener("touchstart", point => {
+            //point.preventDefault();
+          
             for(let touch of point.changedTouches) {
                 let context  = Object.create(null);
                 contexts.set(touch.identifier, context);
@@ -340,7 +342,7 @@ export class Recognizer {
     
             context.handler = null;
             // console.log("pressStart");
-            this.dispatcher.dispatch("pressstart", {});
+            ("pressstart", {});
         }, 500);
     }
     move(point, context) {
