@@ -168,3 +168,30 @@ class extends Generator {
         at Object.<anonymous> (C:\Users\14698\AppData\Roaming\npm\node_modules\webpack-cli\bin\cli.js:366:3)
     ```
     * 这个问题出现在webpack的过程中，由于不懂webpack源码，找不到问题的根源
+
+## 第四节课 webpack基本知识
+1. webpack最初设计是将node代码打包成浏览器可用代码
+2. webpack用于多文件合并
+3. webpack最终输出js文件，然后html需要手工引用
+4. webpack可以通过设置loader和plugin来控制合并的规则和文本转换
+5. 安装时需要两个包"webpack","webpack-cli"
+6. 本地安装"webpack-cli"后可以通过`npx webpack` 执行webpack命令
+7. webpack可以多入口（entry）打包，但一次执行只打包一个文件及其依赖
+8. output配置输出地址和文件命
+9. loader实际上进行了文本转换，然后被webpack通过import和require调用
+10. test 属性决定了什么后缀名的文件调用什么样的loader
+
+## 第五节课 babel基本知识
+1. babel是一个独立于webpack的系统
+2. babel用于将新版本的js转换成老版本的js
+3. 在终端中安装babel通过 `npm install @babel/core @babel/cli` 命令
+4. 通过 `babel 文件路径 > 输出的文件名` 将文件输出（可以指定拓展名）
+5. babel配置文件名`.babelrc`，用JSON的形式配置
+6. 简单配置举例：
+    ```
+    {
+        "presets": ["@babel/preset-env"]
+    }
+    ```
+7. 安装babel配置文件可通过 `npm install @babel/preset-env`
+8. babel经常通过webpack来作为loader使用
