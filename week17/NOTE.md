@@ -85,6 +85,42 @@
 
 
 
+## 第四节课：提高覆盖率并在vsCode中进行调试
+
+* 不断进行测试，以保证行覆盖率（line）足够高
+
+  * 找到没被覆盖到的行，并添加测试用例以进行覆盖
+
+* 使用`vscode`进行调试
+
+  * 因为要调试`mocha`测试而不是某个js文件，所以需要对`lunch.js`文件进行配置
+
+    * ```json
+      "program": "${workspaceFolder}/node_modules/mocha/bin/mocha"	
+      
+      "program": "${workspaceFolder}/node_modules/.bin/mocha"
+      //在两者中选一个，后者可能只适用于老板本的mocha
+      ```
+
+    * ```json
+      "args": [	]		//配置mocha的参数
+      ```
+
+  * 因为在运行中调用了“register”，所以`lunch.js`要配置node的参数
+
+    * ```json
+      "runtimeArgs": [ "--require", "@babel/register" ]
+      ```
+
+  * 因为调用了“babel”，所以代码被翻译之后行数变得不对应，为了方便打断点需要进行配置
+
+    * 在lunch.js 中`"sourceMaps": true`
+    * 在.babelrc中`"sourceMaps": inline`
+
+
+
+
+
 
 
 
