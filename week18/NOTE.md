@@ -333,7 +333,92 @@ http.createServer(function(request, response) {
     }
     ```
 
-    
+
+## 第八节课：实现文件发布系统
+
+### 从读取流往写入流输入数据的简易方式
+
+1. `readStream.pipe(writeStream)`，通过读取流往写入流传输数据
+2. `readStream.on("end")`，结束读取流，表示严谨
+
+### 获取文件大小
+
+1. 引用文件系统`const fs = require("fs");`
+
+2. 使用`fs.stat(path[, options], callback)`方法
+
+3. 在callback中获取stats.size，如
+
+   ``````javascript
+   fs.stat(path[, options], (err, stats) => {
+       stats.size;
+   })
+   ``````
+
+### 压缩文件：使用archiver
+
+1. 安装archiver，`npm install archiver --save`。作为实际应用的一部分，不用“-dev”参数
+
+2. 引用文件`const archiver = require("archiver");`
+
+3. 设置压缩等级
+
+   ```javascript
+   const archive = archiver('zip', {
+     zlib: { level: 9 } // Sets the compression level.
+   });
+   ```
+
+4. 选择压缩目录
+
+   ```javascript
+   // append files from a sub-directory, putting its contents at the root of archive
+   archive.directory('subdir/', false);
+   ```
+
+5. 声明初始化设置完成
+
+   ```javascript
+   // finalize the archive (ie we are done appending files but streams have to finish yet)
+   // 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
+   archive.finalize();
+   ```
+
+6. 如果需要传输
+
+   ```javascript
+   // pipe archive data to the file
+   archive.pipe(output);
+   ```
+
+7. [archiver参考资料](https://www.npmjs.com/package/archiver)
+
+### 解压文件：使用unzipper
+
+1. 安装unzipper`npm install unzipper --save`，作为服务器的一部分也使用“--save”
+
+2. 引用文件`const unzipper = require("unzipper");`
+
+3. 调用unzipper
+
+   ```javascript
+   fs.createReadStream('path/to/archive.zip')
+     .pipe(unzipper.Extract({ path: 'output/path' }));
+   ```
+
+4. 读取流为request时(使用archiver压缩并pipe时读取流也为request)
+
+   ```javascript
+     request.pipe(unzipper.Extract({ path: 'output/path' }));
+   ```
+
+5. [unzipper参考文档](https://www.npmjs.com/package/unzipper)
+
+## 第九节课：用GitHub oAuth做一个登录实例
+
+
+
+
 
 
 
