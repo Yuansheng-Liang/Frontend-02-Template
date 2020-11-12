@@ -2,7 +2,7 @@
 
 # 第一节课：
 ## 触摸事件touchEvent.changedTouches，返回一个对象： 
-        这个 TouchList 对象列出了和这个触摸事件对应的 Touch 对象。
+        这个 TouchList 对象列出了和这个触摸事件对应的 Touch 对象。  
         对于 touchstart 事件, 这个 TouchList 对象列出在此次事件中新增加的触点。
         对于 touchmove 事件，列出和上一次事件相比较，发生了变化的触点。
         对于touchend事件，changedTouches 是已经从触摸面的离开的触点的集合（也就是说，手指已经离开了屏幕/触摸面）。
@@ -27,26 +27,26 @@
 # 第三节课：
 ## 手势事件的逻辑：
 
-    start事件：
-        1.在开始点击时记录下点击的位置：startX，startY
-        2.将状态标志isTap = true，isPan = false，isPress = false初始化
-        3.使用setTimeout()函数，在点击时长超过0.5s的时候触发回调，并在回调时将将状态置为press，并将handler变量置为null
-        4.用handler变量记录setTimeout()的返回值，用来在move()，end()，cancel()中clearTimeout(handler)
-        5.将当前坐标clientX，clientY存入数组，以在move中计算move移动的速度
-        【可以选择在start中分配type为pressStart的Event】
+start事件：
+1. 在开始点击时记录下点击的位置：startX，startY
+2. 将状态标志isTap = true，isPan = false，isPress = false初始化
+3. 使用setTimeout()函数，在点击时长超过0.5s的时候触发回调，并在回调时将将状态置为press，并将handler变量置为null
+4. 用handler变量记录setTimeout()的返回值，用来在move()，end()，cancel()中clearTimeout(handler)
+5. 将当前坐标clientX，clientY存入数组，以在move中计算move移动的速度
+【可以选择在start中分配type为pressStart的Event】
 
-    move事件：
-        1.计算dx，dy来判断是否开始pan，当（dx ** 2 + dy **2 >= 100 && !isPan 时，pan）开始，并clearTimeout(headler)，设置状态标志变换
-        新增状态标志isVertical,来判断是否垂直滑动，可以分配panstart的Event
-        2.将存点数组过滤，只留下近0.5s的points
-        3.在move中存入points
+move事件：
+1. 计算dx，dy来判断是否开始pan，当（dx ** 2 + dy **2 >= 100 && !isPan 时，pan）开始，并clearTimeout(headler)，设置状态标志变换
+新增状态标志isVertical,来判断是否垂直滑动，可以分配panstart的Event
+2. 将存点数组过滤，只留下近0.5s的points
+3. 在move中存入points
 
-    end事件:
-        1.判断各种状态结束，设置状态标志位并分配Event
-        2.tap和press事件判断后只需要设置状态标志位并分配Event
-        3.用points数组计算move的速度来判断是否位flick事件
-        4.在事件中设置isFlick状态标志位，分配Event
-        5.在flick事件判断后进行pan的判断，并设置状态标志位，在分配Event时返回各个属性
+end事件:
+1. 判断各种状态结束，设置状态标志位并分配Event
+2. tap和press事件判断后只需要设置状态标志位并分配Event
+3. 用points数组计算move的速度来判断是否位flick事件
+4. 在事件中设置isFlick状态标志位，分配Event
+5. 在flick事件判断后进行pan的判断，并设置状态标志位，在分配Event时返回各个属性
 
 # 第四节课
 ## 整合手势与鼠标的状态标志位

@@ -17,7 +17,7 @@
     "name": "generator-XXX", 
     --------------------------
     "main": "generators/app/index.js",
-    ```    
+    ```
 5. 设置index.js的内容：
     ```
     var Generator = require('yeoman-generator');
@@ -194,4 +194,4 @@ class extends Generator {
     }
     ```
 7. 安装babel配置文件可通过 `npm install @babel/preset-env`
-8. babel经常通过webpack来作为loader使用
+8. babel经常通过 `webpack` 来作为loader使用

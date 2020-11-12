@@ -23,7 +23,7 @@ http.createServer((request,response) =>{
 }
 #container #myid {
     width:200px;
-    height:200px;
+    height:100px;
     background-color:rgb(255,0,0);
 }
 #container .c1 {

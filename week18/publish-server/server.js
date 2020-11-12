@@ -43,12 +43,13 @@ function getToken(code, callback) {
 function publish(request, response) {
     let query = querystring.parse(request.url.match(/^\/publish\?([\s\S]+)$/)[1]);
 
-    request.pipe(unzipper.Extract({path: "../server/public"}))
+    //request.pipe(unzipper.Extract({path: "../server/public"}))
     getUser(query.token, info => {
         if(info.login === "Yuansheng-Liang") {
             request.pipe(unzipper.Extract({path: "../server/public"}));
             request.on("end", function(){
                 response.end("success!")
+                console.log("\n success!");
             })
         }
     })
@@ -88,25 +89,25 @@ http.createServer(function(request, response) {
     if(request.url.match(/^\/publish\?/))
         return publish(request, response);
 
-
-
-//pipe读传    
+//注释块        
 {
-    // request.pipe(onFile);
-    //request.pipe(unzipper.Extract({path: "../server/public"}))
-}
-
-//流式读传
-{
-    // let onFile = fs.createWriteStream("../server/public/sample.zip");
-    // request.on("data", chunk => {
-    //     console.log(chunk.toString());
-    //     onFile.write(chunk);
-    // });
-    // request.on("end", chunk => {
-    //     onFile.end();
-    //     response.end("Success");
-    // })
-    
+    //pipe读传    
+    {
+        // request.pipe(onFile);
+        //request.pipe(unzipper.Extract({path: "../server/public"}))
+    }
+    //流式读传
+    {
+        // let onFile = fs.createWriteStream("../server/public/sample.zip");
+        // request.on("data", chunk => {
+        //     console.log(chunk.toString());
+        //     onFile.write(chunk);
+        // });
+        // request.on("end", chunk => {
+        //     onFile.end();
+        //     response.end("Success");
+        // })
+        
+    }
 }
 }).listen(8082)

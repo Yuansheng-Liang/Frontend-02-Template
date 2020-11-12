@@ -416,6 +416,33 @@ http.createServer(function(request, response) {
 
 ## 第九节课：用GitHub oAuth做一个登录实例
 
+### 主要思想：
+
+1. 注册Git app，获取client_id和client_secret
+
+2. **客户端**打开 https://github.com/login/oauth/authorize+client_id=...（可以使用nodejs的API：child_process执行子程序，来执行命令行的打开网页。windows系统用”start  url“命令，类Linux系统用”open url“命令）
+
+3. **客户端**网页跳转至登录授权页面
+
+4. 授权后客户端网页跳转至回调（callback）URL页面，并被服务端接收URL（URL以querystring的方式带着code信息）
+
+5. **服务端**监听并识别code后，用code，client_id，client_secret到https://github.com/login/oauth/access_token换取token，端口为443，服务器会通过response返回token（以querystring的形式）
+
+6. **服务端**将token以querystring的方式通过超链接的方式（<a>标签）返回给callbackURL的页面，将token下放给客户端，将token回传给客户端以便核实客户端身份（客户端通过request发送token给服务端，token可以验证用户信息，以便服务端将request和token身份匹配，以确认客服端身份）
+
+7. **客户端**点击<a>标签，跳转至指定URL，并通过在客户端建立的server读取URL并分析其中的token信息
+
+8. **客户端**以path的形式通过request往**服务端**发送token并传输文件
+
+9. **服务端**获得token后往https://api.github.com/user发送https类的request，以获取客户端的信息。request headers的内容需要包括：
+
+   ```
+   Authorization: token OAUTH-TOKEN
+   GET https://api.github.com/user
+   ```
+
+10. **服务端**验证客户端身份信息后（一般会对接公司内部的权限系统）就可以允许执行客户端的请求了
+
 
 
 

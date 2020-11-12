@@ -27,7 +27,7 @@ class Request{
 
     send(connection){
         return new Promise((resolve,reject) => {
-            const parser = new RsponseParser;
+            const parser = new RsponseParser();
             if(connection){
                 connection.write(this.toString());
             }else{
@@ -153,7 +153,7 @@ class TrunkedBodyParser {
     constructor(){
         this.WAITING_LENGTH = 0;
         this.WAITING_LENGTH_LINE_END = 1;
-        this.READING_TUNK = 2;
+        this.READING_TRUNK = 2;
         this.WAITING_NEW_LINE = 3;
         this.WAITING_NEW_LINE_END = 4;
         this.length = 0;
@@ -174,9 +174,9 @@ class TrunkedBodyParser {
             }
         } else if(this.current === this.WAITING_LENGTH_LINE_END) {
             if(char === '\n') {
-                this.current = this.READING_TUNK;
+                this.current = this.READING_TRUNK;
             }
-        } else if(this.current === this.READING_TUNK) {
+        } else if(this.current === this.READING_TRUNK) {
             this.content.push(char);
             this.length --;
             if(this.length === 0) {
@@ -214,6 +214,7 @@ void async function(){
     let dom = parser.parseHTML(response.body); 
     let viewport = images(800,600);
 ////    render(viewport,dom.children[0].children[3].children[1].children[3]);
+    console.log(dom);
     render(viewport,dom);
     viewport.save('viewport.jpg');
 }();
